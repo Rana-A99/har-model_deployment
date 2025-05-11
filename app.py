@@ -12,11 +12,17 @@ activities = ['Stand', 'Sit', 'Talk-sit', 'Talk-stand','Stand-sit','Lay','Lay-st
 st.title("Human Activity Recognition")
 st.write("Upload sensor data CSV file (300 timesteps x 6 features)")
 
-uploaded_file = st.file_uploader("Choose CSV file", type="csv")
+df = pd.read_csv(uploaded_file, header=None)
+data = df.to_numpy()
 
-if uploaded_file:
-    data = pd.read_csv(uploaded_file, delimiter=',')
-    data = data.reshape(1, 300, 6)  
+if data.shape == (300, 6):
+    data = data.reshape(1, 300, 6)
+elif data.shape == (1, 1800):
+    data = data.reshape(1, 300, 6)
+else:
+    st.error("❌ CSV must have either 300 rows x 6 columns OR 1 row x 1800 columns.")
+    st.stop()
+  
     
     # prediction
     prediction = model.predict(data)
