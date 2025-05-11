@@ -1,6 +1,7 @@
 
 import streamlit as st
 import numpy as np
+import pandas as pd
 from tensorflow.keras.models import load_model
 
 model = load_model('har_model.h5')
@@ -14,8 +15,8 @@ st.write("Upload sensor data CSV file (300 timesteps x 6 features)")
 uploaded_file = st.file_uploader("Choose CSV file", type="csv")
 
 if uploaded_file:
-    data = np.loadtxt(uploaded_file, delimiter=',')
-    data = data.reshape(1, 300, 6)  # Reshape for model
+    data = pd.read_csv(uploaded_file, delimiter=',')
+    data = data.reshape(1, 300, 6)  
     
     # prediction
     prediction = model.predict(data)
